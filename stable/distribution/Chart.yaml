@@ -1,20 +1,22 @@
-apiVersion: v1
-name: distribution
+apiVersion: v2
+appVersion: 2.28.2
+dependencies:
+- condition: postgresql.enabled
+  name: postgresql
+  repository: https://charts.jfrog.io/
+  version: 10.3.18
 description: A Helm chart for JFrog Distribution
-version: 3.2.4
-appVersion: 1.6.0
-home: https://jfrog.com/platform/
-icon: https://raw.githubusercontent.com/jfrog/artifactory-dcos/master/images/jfrog_med.png
+home: https://jfrog.com/distribution/
+icon: https://raw.githubusercontent.com/jfrog/charts/master/stable/distribution/logo/distribution-logo.png
 keywords:
 - distribution
 - jfrog
+kubeVersion: '>= 1.19.0-0'
 maintainers:
-- email: jainishs@jfrog.com
-  name: jainishshah17
-- email: eldada@jfrog.com
-  name: eldada
-- email: rimasm@jfrog.com
-  name: rimusz
+- email: installers@jfrog.com
+  name: Chart Maintainers at JFrog
+name: distribution
 sources:
-- https://bintray.com/jfrog/product/distribution/view
 - https://github.com/jfrog/charts
+type: application
+version: 102.28.2

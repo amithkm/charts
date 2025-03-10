@@ -19,8 +19,11 @@ set -o nounset
 set -o pipefail
 
 readonly IMAGE_TAG=${CHART_TESTING_TAG}
-readonly IMAGE_REPOSITORY="quay.io/helmpack/chart-testing"
-readonly CLUSTER_NAME=chart-testing
+readonly IMAGE_REPOSITORY="releases-docker.jfrog.io/charts-ci"
+readonly REPO_ROOT="${REPO_ROOT:-$(git rev-parse --show-toplevel)}"
+
+# shellcheck source=test/common.sh
+source "${REPO_ROOT}/test/common.sh"
 
 run_ct_container() {
     echo 'Running ct container...'
@@ -29,17 +32,6 @@ run_ct_container() {
         --workdir /workdir \
         "$IMAGE_REPOSITORY:$IMAGE_TAG"
     echo
-}
-
-cleanup() {
-    echo 'Removing ct container...'
-    docker kill ct > /dev/null 2>&1
-
-    echo 'Done!'
-}
-
-docker_exec() {
-    docker exec --interactive -e HELM_HOST=127.0.0.1:44134 -e HELM_TILLER_SILENT=true ct "$@"
 }
 
 lookup_apiserver_container_id() {
@@ -73,32 +65,11 @@ connect_to_cluster() {
     docker_exec kubectl config use-context docker-desktop
 }
 
-install_tiller() {
-     docker_exec apk add bash
-     echo "Install Tillerless Helm plugin..."
-     docker_exec helm init --client-only
-     docker_exec helm plugin install https://github.com/rimusz/helm-tiller
-     docker_exec bash -c 'echo "Starting Tiller..."; helm tiller start-ci >/dev/null 2>&1 &'
-     docker_exec bash -c 'echo "Waiting Tiller to launch on 44134..."; while ! nc -z localhost 44134; do sleep 1; done; echo "Tiller launched..."'
-     echo
-}
-
-install_charts() {
-    echo "Add git remote k8s ${CHARTS_REPO}"
-    git remote add k8s "${CHARTS_REPO}" &> /dev/null || true
-    git fetch k8s master
-    echo
-    # shellcheck disable=SC2086
-    docker_exec ct install ${CHART_TESTING_ARGS} --config /workdir/test/ct.yaml
-    echo
-}
-
 main() {
     run_ct_container
     trap cleanup EXIT
 
     connect_to_cluster
-    install_tiller
     install_charts
 }
 

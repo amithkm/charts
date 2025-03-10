@@ -4,19 +4,17 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+readonly FILES_TO_LINT=$(ls test/*.sh)
 readonly IMAGE_REPOSITORY="koalaman/shellcheck-alpine"
+readonly SHELLCHECK_CMD="docker run --rm -v "$(pwd):/workdir" --workdir /workdir ${IMAGE_REPOSITORY} shellcheck -x"
 
 main() {
 
-    docker run --rm -v "$(pwd):/workdir" --workdir /workdir "$IMAGE_REPOSITORY" shellcheck -x test/e2e-docker4mac.sh
-    docker run --rm -v "$(pwd):/workdir" --workdir /workdir "$IMAGE_REPOSITORY" shellcheck -x test/e2e-github.sh
-    docker run --rm -v "$(pwd):/workdir" --workdir /workdir "$IMAGE_REPOSITORY" shellcheck -x test/e2e-gke.sh
-    docker run --rm -v "$(pwd):/workdir" --workdir /workdir "$IMAGE_REPOSITORY" shellcheck -x test/e2e-kind.sh
-    docker run --rm -v "$(pwd):/workdir" --workdir /workdir "$IMAGE_REPOSITORY" shellcheck -x test/e2e-local-gke.sh
-    docker run --rm -v "$(pwd):/workdir" --workdir /workdir "$IMAGE_REPOSITORY" shellcheck -x test/lint-charts.sh
-    docker run --rm -v "$(pwd):/workdir" --workdir /workdir "$IMAGE_REPOSITORY" shellcheck -x test/lint-charts-local.sh
+    for f in ${FILES_TO_LINT} ; do
+        ${SHELLCHECK_CMD} "${f}"
+    done
 
-    echo "Done Scripts Linting!"
+    echo "Done Scripts Linting."
 }
 
 main

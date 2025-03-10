@@ -1,17 +1,21 @@
 # JFrog Helm Charts
 
-This repository hosts the official **JFrog Helm Charts** to deploy **JFrog** products to [Kubernetes](https://kubernetes.io/)
+This repository hosts the official **[JFrog](https://jfrog.com/) Helm Charts** for deploying **JFrog** products to [Kubernetes](https://kubernetes.io/)
 
-## Install Helm
+For older version please refer to https://github.com/jfrog/charts/tree/pre-unified-platform
 
-Get the latest [Helm release](https://github.com/kubernetes/helm#install).
+## Install Helm (only V3 is supported)
+
+Get the latest [Helm release](https://github.com/helm/helm#install).
 
 ## Install Charts
 
-You need to add this Chart repo to Helm:
+### Add JFrog Helm repository
 
-```console
-helm repo add jfrog https://charts.jfrog.io/
+Before installing JFrog helm charts, you need to add the [JFrog helm repository](https://charts.jfrog.io) to your helm client.
+
+```bash
+helm repo add jfrog https://charts.jfrog.io
 helm repo update
 ```
 
@@ -19,12 +23,15 @@ helm repo update
 
 ## Contributing to JFrog Charts
 
-Fork the `repo`, make changes and then please run `make lint` to lint charts locally, and at last install the chart to see it is working. :)
+Fork the `repo`, make changes and then please run `make lint` to lint charts locally, and at least install the chart to see it is working. :)
 
-On success make a [pull request](https://help.github.com/articles/using-pull-requests) (PR).
+On success make a [pull request](https://help.github.com/articles/using-pull-requests) (PR) on to the `master` branch.
 
-Upon successful review, someone will give the PR a __LGTM__ (_looks good to me_) in the review thread.
-Two __LGTM__ are needed to get the PR approved and merged.
+We will take this PR changes internally, review and test.
+
+Upon successful review , someone will give the PR a __LGTM__ (_looks good to me_) in the review thread.
+
+We will add PR changes in upcoming releases and credit the contributor with PR link in changelog (and also closing the PR raised by contributor).
 
 ## Linting charts locally
 
@@ -91,38 +98,6 @@ make mac -- --all
 
 **Note:** It might take a while to run install test for all charts in `Docker for Mac`.
 
-## Manually testing charts with Docker and KinD
-
-**Note:** [kind cli](https://github.com/kubernetes-sigs/kind/) must be installed.
-
-You can install and test all changed charts in Docker with Kind:
-
-```console
-make kind
-```
-
-### Forcing to install unchanged charts
-
-You can force to install one chart with `--charts` flag:
-
-```console
-make kind -- --charts stable/artifactory
-```
-
-You can force to install a list of charts (separated by comma) with `--charts` flag:
-
-```console
-make kind -- --charts stable/artifactory,stable/xray
-```
-
-You can force to install all charts with `--all` flag:
-
-```console
-make kind -- --all
-```
-
-**Note:** It might take a while to run install test for all charts in Docker with Kind.
-
 ## Manually testing charts with remote GKE cluster
 
 You can install and test changed charts with `GKE` cluster set in kubeconfig `context`:
@@ -163,6 +138,9 @@ Then store the `CLUSTER` file in the root folder of the repo. It is also ignored
 
 In such setup your local default cluster can be different from the charts testing one.
 
+## Examples
+
+For more detailed examples of each chart values, please refer [examples](https://github.com/jfrog/charts/tree/master/examples).
 
 ## Docs
 

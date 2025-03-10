@@ -12,7 +12,17 @@
 .vscode
 
 # Chart dependencies
-**/charts/*.tgz
+**/charts/*
+
+# Terraform examples
+
+examples/terraform/jfrog-platform-aws-install/.terraform.lock.hcl
+examples/terraform/jfrog-platform-aws-install/.terraform/
+examples/terraform/jfrog-platform-aws-install/jfrog-platform/
+examples/terraform/jfrog-platform-aws-install/artifactory-license.yaml
+examples/terraform/jfrog-platform-aws-install/jfrog-custom.yaml
+examples/terraform/jfrog-platform-aws-install/terraform.tfstate
+examples/terraform/jfrog-platform-aws-install/terraform.tfstate.backup
 
 #
 tmp
@@ -20,3 +30,4 @@ tmp
 logs
 build
 CLUSTER
+ct_previous*

@@ -9,17 +9,8 @@ metadata:
     release: {{ .Release.Name }}
 data:
   installer-info.json: |
-    {
-      "productId": "JFrogInstaller_Helm_{{ template "artifactory.chart" . }}",
-      "features": [
-      {
-        "featureId": "AppVersion/{{ default .Chart.AppVersion .Values.artifactory.image.version }}"
-      },
-      {
-        "featureId": "Installer/{{ default "helm" .Values.installer.type }}"
-      },
-      {
-        "featureId": "Platform/{{ default "kubernetes" .Values.installer.platform }}"
-      }
-      ]
-    }
+{{- if .Values.installerInfo -}}
+{{- tpl .Values.installerInfo . | nindent 4 -}}
+{{- else -}}
+{{ (tpl ( .Files.Get "files/installer-info.json" | nindent 4 ) .) }}
+{{- end -}}
